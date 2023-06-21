@@ -10,12 +10,13 @@ Image build elements
 
 Images are built with elements from ``diskimage-builder``,
 ``ironic-python-agent-builder``, and the ``dib`` directory of this repository.
-These can be installed in a venv, for example::
+These can be installed in a venv, for example from the ``edpm-image-builder``
+directory::
 
   python3 -m venv ./venv
   source ./venv/bin/activate
-  pip install -r requirements.txt ./
-  export ELEMENTS_PATH=$(pwd)/venv/share/edpm-image-builder/dib:$(pwd)/venv/share/ironic-python-agent-builder/dib
+  pip install -r requirements.txt
+  export ELEMENTS_PATH=$(pwd)/dib:$(pwd)/venv/share/ironic-python-agent-builder/dib
 
 edpm-hardened-uefi
 ------------------
@@ -36,7 +37,7 @@ distribution by running::
 It can then be copied out of the container image, for example into
 ``/path/to/images``::
 
-    podman run --volume /path/to/images:/target:rw --rm edpm-hardened-uefi:latest
+    podman run --volume /path/to/images:/target:Z --rm edpm-hardened-uefi:latest
 
 ironic-python-agent
 -------------------
@@ -60,4 +61,4 @@ distribution by running::
 It can then be copied out of the container image, for example into
 ``/path/to/images``::
 
-    podman run --volume /path/to/images:/target:rw --rm ironic-python-agent:latest
+    podman run --volume /path/to/images:/target:Z --rm ironic-python-agent:latest
