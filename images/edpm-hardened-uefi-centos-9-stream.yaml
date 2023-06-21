@@ -10,15 +10,12 @@
   - dynamic-login
   - dracut-regenerate
   - modprobe
-  - openssh
   - disable-nouveau
   - reset-bls-entries
   # edpm-image-builder elements
   - edpm-base
   - edpm-partition-uefi
   - enable-packages-install
-  - interface-names
-  - iptables
   - openvswitch
   - override-pip-and-virtualenv
   - remove-resolvconf
