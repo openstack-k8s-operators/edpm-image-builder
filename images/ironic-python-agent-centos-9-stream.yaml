@@ -2,6 +2,7 @@
   elements:
   # diskimage-builder elements
   - centos
+  - ceph
   - dynamic-login
   - element-manifest
   - selinux-permissive
