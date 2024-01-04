@@ -11,6 +11,7 @@
   - modprobe
   - disable-nouveau
   - reset-bls-entries
+  - fips
   # edpm-image-builder elements
   - edpm-base
   - edpm-partition-uefi
@@ -33,3 +34,4 @@
     # https://review.opendev.org/c/openstack/diskimage-builder/+/884644
     DIB_BOOTLOADER_DEFAULT_CMDLINE: 'memtest=0'
     DIB_BOOTLOADER_VIRTUAL_TERMINAL: ''
+    DIB_NO_TIMER_CHECK: 'False'
