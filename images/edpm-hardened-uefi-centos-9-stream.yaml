@@ -3,6 +3,7 @@
   elements:
   # diskimage-builder elements
   - centos
+  - ceph
   - selinux-permissive
   - stable-interface-names
   - bootloader
