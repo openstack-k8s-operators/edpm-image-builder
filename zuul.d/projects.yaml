@@ -3,7 +3,7 @@
     name: openstack-k8s-operators/edpm-image-builder
     github-check:
       jobs:
-        - eib-content-provider-build-images
+        - openstack-meta-content-provider
         - eib-crc-podified-edpm-baremetal: &eib_content_provider
             dependencies:
-              - eib-content-provider-build-images
+              - openstack-meta-content-provider
