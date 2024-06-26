@@ -4,6 +4,5 @@
     github-check:
       jobs:
         - eib-content-provider-build-images
-        - eib-crc-podified-edpm-baremetal: &eib_content_provider
-            dependencies:
-              - eib-content-provider-build-images
+        - eib-podified-multinode-ironic-deployment
+        - eib-crc-podified-edpm-baremetal
