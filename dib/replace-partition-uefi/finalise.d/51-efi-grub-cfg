@@ -1,0 +1,21 @@
+#!/bin/bash
+
+if [ ${DIB_DEBUG_TRACE:-1} -gt 0 ]; then
+    set -x
+fi
+set -eu
+set -o pipefail
+
+GRUB_CFG=/boot/efi/$EFI_BOOT_DIR/grub.cfg
+GRUBENV=/boot/efi/$EFI_BOOT_DIR/grubenv
+if [ -a $GRUB_CFG ]; then
+    rm $GRUB_CFG
+fi
+if [ -a $GRUBENV ]; then
+    rm $GRUBENV
+fi
+cat > $GRUB_CFG << EOF
+search --no-floppy --set prefix --file /grub2/grub.cfg
+set prefix=(\$prefix)/grub2
+configfile \$prefix/grub.cfg
+EOF

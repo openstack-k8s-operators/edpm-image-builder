@@ -1,0 +1,10 @@
+{
+  "family": {
+    "redhat": {
+      "iscsi_package": ""
+    }
+  },
+  "default": {
+    "iscsi_package": ""
+  }
+}
