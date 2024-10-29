@@ -41,8 +41,13 @@ distribution by running::
 
 It can then be copied out of the container image, for example into
 ``/path/to/images``::
+    
 
-    podman run --volume /path/to/images:/target:Z --rm edpm-hardened-uefi:latest
+    image="edpm-hardened-uefi:latest"
+    container_id=$(podman create "$image")
+    podman cp $container_id:/edpm-hardened-uefi.qcow2.sha256 /path/to/images/edpm-hardened-uefi.qcow2.sha256
+    podman cp $container_id:/edpm-hardened-uefi.qcow2 /path/to/images/edpm-hardened-uefi.qcow2
+    podman rm $container_id
 
 ironic-python-agent
 -------------------
@@ -66,7 +71,12 @@ distribution by running::
 It can then be copied out of the container image, for example into
 ``/path/to/images``::
 
-    podman run --volume /path/to/images:/target:Z --rm ironic-python-agent:latest
+    image="ironic-python-agent:latest"
+    container_id=$(podman create "$image")
+    podman cp $container_id:/ironic-python-agent.sha256 /path/to/images/ironic-python-agent.sha256
+    podman cp $container_id:/ironic-python-agent.initramfs /path/to/images/ironic-python-agent.initramfs
+    podman cp $container_id:/ironic-python-agent.kernel /path/to/images/ironic-python-agent.kernel
+    podman rm $container_id
 
 block-device-yaml
 -----------------

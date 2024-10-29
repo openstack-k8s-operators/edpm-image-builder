@@ -1,8 +1,4 @@
-ARG BASE_IMAGE=quay.io/centos/centos:stream9-minimal
-FROM $BASE_IMAGE
-
-WORKDIR /
-COPY copy_out.sh .
+FROM scratch
 
 ARG IMAGE_NAME=ironic-python-agent
 ARG RAMDISK_FILE=$IMAGE_NAME.initramfs
@@ -12,8 +8,6 @@ ARG CHECKSUM_FILE=$IMAGE_NAME.sha256
 COPY $RAMDISK_FILE .
 COPY $KERNEL_FILE .
 COPY $CHECKSUM_FILE .
-ENV SRC_DIR=/
-ENV DEST_DIR=/target
-ENV CHECKSUM_FILE=$CHECKSUM_FILE
 
-CMD ["/copy_out.sh"]
+# Note: This file doesn't exist but is required to create a container which is never run.
+CMD ["/bin/sh"]
