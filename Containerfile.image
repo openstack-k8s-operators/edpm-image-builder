@@ -1,17 +1,10 @@
-ARG BASE_IMAGE=quay.io/centos/centos:stream9-minimal
-FROM $BASE_IMAGE
-
-WORKDIR /
-COPY copy_out.sh .
-
+FROM scratch
 ARG IMAGE_NAME=edpm-hardened-uefi
 ARG IMAGE_FILE=$IMAGE_NAME.qcow2
 ARG CHECKSUM_FILE=$IMAGE_FILE.sha256
 
 COPY $IMAGE_FILE .
 COPY $CHECKSUM_FILE .
-ENV SRC_DIR=/
-ENV DEST_DIR=/target
-ENV CHECKSUM_FILE=$CHECKSUM_FILE
 
-CMD ["/copy_out.sh"]
+# Note: This file doesn't exist but is required to create a container which is never run.
+CMD ["/bin/sh"]
