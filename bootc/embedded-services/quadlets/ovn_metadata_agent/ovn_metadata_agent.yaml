@@ -1,0 +1,108 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    bind-mount-options: /var/lib/openstack/certs/neutron-metadata/default/tls.crt:z
+  labels:
+    app: ovnmetadataagent
+  name: ovnmetadataagent
+spec:
+  containers:
+  - args:
+    - kolla_start
+    env:
+    - name: KOLLA_CONFIG_STRATEGY
+      value: COPY_ALWAYS
+    - name: EDPM_CONFIG_HASH
+      value: c661c16705cc829f2e51e2cb6f2adca1d433ec4966d0205ba7d64f55e7f8fd97
+    image: quay.io/podified-antelope-centos9/openstack-neutron-metadata-agent-ovn@sha256:3c831bff1724d723fde6b58dc47def1a859168a3781f60da5473c91da5bd2a53
+    name: ovnmetadataagent
+    securityContext:
+      privileged: true
+      procMount: Unmasked
+      runAsGroup: 0
+      runAsUser: 0
+    volumeMounts:
+    - mountPath: /etc/pki/tls/certs/ovndb.crt
+      name: var-lib-openstack-certs-neutron-metadata-default-tls.crt-host-0
+      readOnly: true
+    - mountPath: /run/netns
+      name: run-netns-host-1
+    - mountPath: /var/lib/kolla/config_files/config.json
+      name: var-lib-kolla-config_files-ovn_metadata_agent.json-host-2
+      readOnly: true
+    - mountPath: /etc/neutron/kill_scripts
+      name: var-lib-neutron-kill_scripts-host-3
+      readOnly: true
+    - mountPath: /run/openvswitch
+      name: run-openvswitch-host-4
+    - mountPath: /openstack
+      name: var-lib-openstack-healthchecks-ovn_metadata_agent-host-5
+      readOnly: true
+    - mountPath: /etc/neutron.conf.d
+      name: var-lib-config-data-ansible-generated-neutron-ovn-metadata-agent-host-6
+    - mountPath: /var/lib/neutron
+      name: var-lib-neutron-host-7
+    - mountPath: /usr/local/bin/haproxy
+      name: var-lib-neutron-ovn_metadata_haproxy_wrapper-host-8
+      readOnly: true
+    - mountPath: /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+      name: var-lib-openstack-cacerts-neutron-metadata-tls-ca-bundle.pem-host-9
+      readOnly: true
+    - mountPath: /etc/pki/tls/certs/ovndbca.crt
+      name: var-lib-openstack-certs-neutron-metadata-default-ca.crt-host-10
+      readOnly: true
+    - mountPath: /etc/pki/tls/private/ovndb.key
+      name: var-lib-openstack-certs-neutron-metadata-default-tls.key-host-11
+      readOnly: true
+  hostNetwork: true
+  volumes:
+  - hostPath:
+      path: /var/lib/openstack/certs/neutron-metadata/default/tls.crt
+      type: File
+    name: var-lib-openstack-certs-neutron-metadata-default-tls.crt-host-0
+  - hostPath:
+      path: /run/netns
+      type: Directory
+    name: run-netns-host-1
+  - hostPath:
+      path: /var/lib/kolla/config_files/ovn_metadata_agent.json
+      type: File
+    name: var-lib-kolla-config_files-ovn_metadata_agent.json-host-2
+  - hostPath:
+      path: /var/lib/neutron/kill_scripts
+      type: Directory
+    name: var-lib-neutron-kill_scripts-host-3
+  - hostPath:
+      path: /run/openvswitch
+      type: Directory
+    name: run-openvswitch-host-4
+  - hostPath:
+      path: /var/lib/openstack/healthchecks/ovn_metadata_agent
+      type: Directory
+    name: var-lib-openstack-healthchecks-ovn_metadata_agent-host-5
+  - hostPath:
+      path: /var/lib/config-data/ansible-generated/neutron-ovn-metadata-agent
+      type: Directory
+    name: var-lib-config-data-ansible-generated-neutron-ovn-metadata-agent-host-6
+  - hostPath:
+      path: /var/lib/neutron
+      type: Directory
+    name: var-lib-neutron-host-7
+  - hostPath:
+      path: /var/lib/neutron/ovn_metadata_haproxy_wrapper
+      type: File
+    name: var-lib-neutron-ovn_metadata_haproxy_wrapper-host-8
+  - hostPath:
+      path: /var/lib/openstack/cacerts/neutron-metadata/tls-ca-bundle.pem
+      type: File
+    name: var-lib-openstack-cacerts-neutron-metadata-tls-ca-bundle.pem-host-9
+  - hostPath:
+      path: /var/lib/openstack/certs/neutron-metadata/default/ca.crt
+      type: File
+    name: var-lib-openstack-certs-neutron-metadata-default-ca.crt-host-10
+  - hostPath:
+      path: /var/lib/openstack/certs/neutron-metadata/default/tls.key
+      type: File
+    name: var-lib-openstack-certs-neutron-metadata-default-tls.key-host-11

@@ -4,36 +4,36 @@ RUN rm -rf /etc/yum.repos.d/*.repo
 COPY output/yum.repos.d /etc/yum.repos.d
 
 ARG PACKAGES="\
-    bind-utils \
-    buildah \
-    cephadm \
-    chrony \
-    cloud-init \
-    cronie \
-    crudini \
-    crypto-policies-scripts \
-    device-mapper-multipath \
-    driverctl \
-    grubby \
-    iproute-tc \
-    iptables-services \
-    iscsi-initiator-utils \
-    jq \
-    lvm2 \
-    nftables \
-    numactl \
-    openssh-server \
-    openstack-network-scripts \
-    openstack-selinux \
-    openvswitch \
-    os-net-config \
-    podman \
-    python3-libselinux \
-    python3-pyyaml \
-    rsync \
-    tmpwatch \
-    tuned-profiles-cpu-partitioning \
-    sysstat"
+	bind-utils \
+	buildah \
+	cephadm \
+	chrony \
+	cloud-init \
+	cronie \
+	crudini \
+	crypto-policies-scripts \
+	device-mapper-multipath \
+	driverctl \
+	grubby \
+	iproute-tc \
+	iptables-services \
+	iscsi-initiator-utils \
+	jq \
+	lvm2 \
+	nftables \
+	numactl \
+	openssh-server \
+	openstack-network-scripts \
+	openstack-selinux \
+	openvswitch \
+	os-net-config \
+	podman \
+	python3-libselinux \
+	python3-pyyaml \
+	rsync \
+	tmpwatch \
+	tuned-profiles-cpu-partitioning \
+	sysstat"
 ARG ENABLE_UNITS="openvswitch"
 
 RUN dnf -y install $PACKAGES && dnf clean all && systemctl enable $ENABLE_UNITS
@@ -46,3 +46,31 @@ RUN ln -s /etc/sysconfig/network-scripts/ifdown /usr/sbin/ifdown
 # Drop Ansible fact into place
 COPY ansible-facts/bootc.fact /usr/etc/ansible/facts.d/bootc.fact
 RUN chmod +x /usr/etc/ansible/facts.d/bootc.fact
+
+# Template systemd service for services
+COPY embedded-services/quadlets/systemd/service-template.kube /usr/share/containers/systemd/edpm-compute@.kube
+
+## Service specific quadlets
+COPY embedded-services/quadlets/ovn-controller/ovn_controller.yaml /usr/share/containers/systemd/ovn_controller.yaml
+COPY embedded-services/quadlets/ovn-controller/ovn_controller.image /usr/share/containers/systemd/ovn_controller.image
+COPY embedded-services/quadlets/iscsid/iscsid.yaml /usr/share/containers/systemd/iscsid.yaml
+COPY embedded-services/quadlets/iscsid/iscsid.image /usr/share/containers/systemd/iscsid.image
+COPY embedded-services/quadlets/nova_compute/nova_compute.yaml /usr/share/containers/systemd/nova_compute.yaml
+COPY embedded-services/quadlets/nova_compute/nova_compute.image /usr/share/containers/systemd/nova_compute.image
+COPY embedded-services/quadlets/ovn_metadata_agent/ovn_metadata_agent.yaml /usr/share/containers/systemd/ovn_metadata_agent.yaml
+COPY embedded-services/quadlets/ovn_metadata_agent/ovn_metadata_agent.image /usr/share/containers/systemd/ovn_metadata_agent.image
+COPY embedded-services/quadlets/logrotate_crond/logrotate_crond.yaml /usr/share/containers/systemd/logrotate_crond.yaml
+COPY embedded-services/quadlets/logrotate_crond/logrotate_crond.image /usr/share/containers/systemd/logrotate_crond.image
+COPY embedded-services/quadlets/multipathd/multipathd.yaml /usr/share/containers/systemd/multipathd.yaml
+COPY embedded-services/quadlets/multipathd/multipathd.image /usr/share/containers/systemd/multipathd.image
+COPY embedded-services/quadlets/ceilometer_agent_compute/ceilometer_agent_compute.yaml /usr/share/containers/systemd/ceilometer_agent_compute.yaml
+COPY embedded-services/quadlets/ceilometer_agent_compute/ceilometer_agent_compute.image /usr/share/containers/systemd/ceilometer_agent_compute.image
+
+# Pre-cache containers for each service
+RUN podman pull quay.io/podified-antelope-centos9/openstack-ceilometer-compute:current-podified
+RUN podman pull quay.io/podified-antelope-centos9/openstack-iscsid:current-podified
+RUN podman pull quay.io/podified-antelope-centos9/openstack-cron:current-podified
+RUN podman pull quay.io/podified-antelope-centos9/openstack-multipathd:current-podified
+RUN podman pull quay.io/podified-antelope-centos9/openstack-nova-compute:current-podified
+RUN podman pull quay.io/podified-antelope-centos9/openstack-ovn-controller:current-podified
+RUN podman pull quay.io/podified-antelope-centos9/openstack-neutron-metadata-agent-ovn:current-podified
