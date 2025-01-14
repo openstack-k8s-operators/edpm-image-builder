@@ -8,6 +8,40 @@ metadata:
     app: novacompute
   name: novacompute
 spec:
+  initContainers:
+  - args:
+    - bash
+    - -c
+    - $*
+    - --
+    - eval
+    - python3
+    - /sbin/nova_statedir_ownership.py
+    - '|'
+    - logger
+    - -t
+    - nova_compute_init
+    env:
+    - name: NOVA_STATEDIR_OWNERSHIP_SKIP
+      value: /var/lib/nova/compute_id
+    - name: __OS_DEBUG
+      value: "False"
+    image: quay.io/podified-antelope-centos9/openstack-nova-compute:current-podified
+    name: novacomputeinit
+    securityContext:
+      runAsGroup: 0
+      runAsUser: 0
+      seLinuxOptions:
+        type: spc_t
+    volumeMounts:
+    - mountPath: /var/lib/_nova_secontext
+      name: var-lib-_nova_secontext-host-0
+    - mountPath: /sbin/nova_statedir_ownership.py
+      name: var-lib-openstack-config-nova-nova_statedir_ownership.py-host-1
+    - mountPath: /dev/log
+      name: dev-log-host-2
+    - mountPath: /var/lib/nova
+      name: var-lib-nova-host-3
   containers:
   - args:
     - kolla_start
@@ -62,6 +96,14 @@ spec:
       readOnly: true
   hostNetwork: true
   volumes:
+  - hostPath:
+      path: /var/lib/_nova_secontext
+      type: Directory
+    name: var-lib-_nova_secontext-host-0
+  - hostPath:
+      path: /var/lib/openstack/config/nova/nova_statedir_ownership.py
+      type: File
+    name: var-lib-openstack-config-nova-nova_statedir_ownership.py-host-1
   - hostPath:
       path: /var/lib/iscsi
       type: Directory
@@ -126,3 +168,11 @@ spec:
       path: /var/lib/openstack/config/ceph
       type: Directory
     name: var-lib-openstack-config-ceph-host-15
+  - hostPath:
+      path: /dev/log
+      type: File
+    name: dev-log-host-2
+  - hostPath:
+      path: /var/lib/nova
+      type: Directory
+    name: var-lib-nova-host-3
