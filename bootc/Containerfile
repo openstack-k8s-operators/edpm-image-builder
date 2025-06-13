@@ -135,6 +135,15 @@ RUN /var/tmp/rhsm-script.sh && \
     (subscription-manager unregister || true) && \
     systemctl enable $ENABLE_UNITS
 
+# Enable FIPS
+COPY 01-fips.toml /usr/lib/bootc/kargs.d/
+# Enable the FIPS crypto policy
+# crypto-policies-scripts is not installed by default in RHEL-10
+RUN dnf install -y crypto-policies-scripts && \
+    dnf clean all && \
+    update-crypto-policies --no-reload --set FIPS && \
+    touch /etc/system-fips
+
 # Drop Ansible fact into place
 COPY ansible-facts/bootc.fact /etc/ansible/facts.d/bootc.fact
 RUN chmod +x /etc/ansible/facts.d/bootc.fact
