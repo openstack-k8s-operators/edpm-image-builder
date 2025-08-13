@@ -1,0 +1,13 @@
+#!/bin/bash
+set -eux
+
+DIB_CLOUD_INIT_NETWORK_RENDERERS=${DIB_CLOUD_INIT_NETWORK_RENDERERS:-['network-manager', 'sysconfig', 'eni', 'netplan', 'networkd']}
+
+mkdir -p /etc/cloud/cloud.cfg.d
+cat > /etc/cloud/cloud.cfg.d/90-network-manager-renderer.cfg <<EOF
+# This file ensures cloud-init prefers NetworkManager for network rendering
+system_info:
+  network:
+    renderers: $DIB_CLOUD_INIT_NETWORK_RENDERERS
+EOF
+chmod 0644 /etc/cloud/cloud.cfg.d/90-network-manager-renderer.cfg
