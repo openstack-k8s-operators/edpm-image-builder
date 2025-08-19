@@ -8,7 +8,6 @@ aliases:
   - rabi
   - jpodivin
   ci-approvers:
-  - lewisdenny
   - frenzyfriday
   - viroel
   openstack-approvers:
