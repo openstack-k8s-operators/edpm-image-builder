@@ -11,7 +11,7 @@ RHSM_REPOS="--enable=rhoso-18.0-for-rhel-9-x86_64-rpms \
 # Only required when Simple Content Access (SCA) is disabled
 RHSM_POOL=""
 
-rm /etc/yum.repos.d/*.repo
+rm -f /etc/yum.repos.d/*.repo
 subscription-manager register --username=$RHSM_USER --password=$RHSM_PASSWORD
 if [ -n "${RHSM_POOL}" ]; then
     subscription-manager attach --pool=$RHSM_POOL
