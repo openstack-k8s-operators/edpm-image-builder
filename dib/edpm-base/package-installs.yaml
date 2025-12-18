@@ -22,6 +22,7 @@ tmpwatch:
 tuned-profiles-cpu-partitioning:
 sysstat:
 iproute-tc:
+sos:
 # Remove for hardened image requirements
 kexec-tools:
   uninstall: True
