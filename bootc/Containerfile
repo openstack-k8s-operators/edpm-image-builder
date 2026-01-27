@@ -114,6 +114,9 @@ ARG NVMEOF_PACKAGES="\
 
 ARG USER_PACKAGES=""
 
+# used for checking BOOTC_SYSTEM in bootc.fact
+RUN echo -e 'VARIANT="EDPM Bootc"\nVARIANT_ID=edpm-bootc' >> /etc/os-release
+
 ARG RHSM_SCRIPT=empty.sh
 COPY $RHSM_SCRIPT /var/tmp/rhsm-script.sh
 RUN /var/tmp/rhsm-script.sh && \
