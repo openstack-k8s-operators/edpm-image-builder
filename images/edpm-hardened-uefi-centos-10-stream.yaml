@@ -1,0 +1,37 @@
+- imagename: edpm-hardened-uefi
+  types: [qcow2]
+  elements:
+  # diskimage-builder elements
+  - centos
+  - selinux-permissive
+  - stable-interface-names
+  - bootloader
+  - element-manifest
+  - dynamic-login
+  - dracut-regenerate
+  - modprobe
+  - disable-nouveau
+  - reset-bls-entries
+  # edpm-image-builder elements
+  - edpm-base
+  - edpm-partition-uefi
+  - enable-packages-install
+  - interface-names
+  - openvswitch
+  - override-pip-and-virtualenv
+  - cloud-init-network-renderer
+  - remove-resolvconf
+  - repo-setup
+  min-tmpfs: 7
+  debug-trace: 1
+  checksum: true
+  environment:
+    DIB_RELEASE: '10-stream'
+    DIB_EPEL_DISABLED: '1'
+    DIB_PYTHON_VERSION: '3'
+    DIB_DHCP_TIMEOUT: '60'
+    DIB_IMAGE_SIZE: '5'
+    DIB_MODPROBE_BLACKLIST: 'usb-storage cramfs freevxfs jffs2 hfs hfsplus squashfs udf bluetooth'
+    DIB_BOOTLOADER_DEFAULT_CMDLINE: 'rd.multipath=default'
+    DIB_BOOTLOADER_VIRTUAL_TERMINAL: ''
+    DIB_BOOTLOADER_USE_SERIAL_CONSOLE: 'False'
