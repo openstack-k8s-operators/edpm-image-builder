@@ -8,8 +8,9 @@ aliases:
   - rabi
   - jpodivin
   ci-approvers:
-  - frenzyfriday
-  - viroel
+  - evallesp
+  - amartyasinha
+  - brjackma
   openstack-approvers:
   - abays
   - dprince
