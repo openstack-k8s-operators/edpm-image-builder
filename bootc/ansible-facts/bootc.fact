@@ -15,6 +15,13 @@ is_bootc() {
   if [[ "$BOOTC_STATUS" == \"bootcHost\" ]]; then
     BOOTC_SYSTEM="true"
   fi
+
+  # Fallback: Check for EDPM bootc variant in os-release
+  # This handles cases where rpm-ostree modifications cause
+  # .status.type to be null (dev/test scenarios)
+  if grep -q 'VARIANT_ID=edpm-bootc' /etc/os-release 2>/dev/null; then
+    BOOTC_SYSTEM="true"
+  fi
 }
 
 is_bootc
