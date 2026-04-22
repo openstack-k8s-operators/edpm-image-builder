@@ -1,0 +1,26 @@
+- imagename: ironic-python-agent
+  elements:
+  # diskimage-builder elements
+  - centos
+  - dynamic-login
+  - element-manifest
+  - selinux-permissive
+  # edpm-image-builder elements
+  - enable-packages-install
+  - interface-names
+  - ironic-agent-multipath
+  - override-pip-and-virtualenv
+  # ironic-python-agent-builder elements
+  # sysbench missing in centos10-delorean-testing repo
+  #- extra-hardware
+  - ironic-python-agent-ramdisk
+  - repo-setup
+  min-tmpfs: 7
+  debug-trace: 1
+  checksum: true
+  environment:
+    DIB_RELEASE: '10-stream'
+    DIB_EPEL_DISABLED: '1'
+    DIB_PYTHON_VERSION: '3'
+    DIB_DHCP_TIMEOUT: '60'
+    DIB_IPA_HARDWARE_RDO: '0'
