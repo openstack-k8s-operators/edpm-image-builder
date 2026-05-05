@@ -5,9 +5,10 @@ set -eux
 # Edit RHSM_ values for the subscription configuration
 RHSM_USER=unset
 RHSM_PASSWORD=unset
-RHSM_REPOS="--enable=rhoso-18.0-for-rhel-9-x86_64-rpms \
-            --enable=rhceph-8-tools-for-rhel-9-x86_64-rpms \
-            --enable=fast-datapath-for-rhel-9-x86_64-rpms"
+RHEL_MAJOR=${RHEL_MAJOR:-9}
+RHSM_REPOS=${RHSM_REPOS:-"--enable=rhoso-18.0-for-rhel-${RHEL_MAJOR}-x86_64-rpms \
+            --enable=rhceph-8-tools-for-rhel-${RHEL_MAJOR}-x86_64-rpms \
+            --enable=fast-datapath-for-rhel-${RHEL_MAJOR}-x86_64-rpms"}
 # Only required when Simple Content Access (SCA) is disabled
 RHSM_POOL=""
 

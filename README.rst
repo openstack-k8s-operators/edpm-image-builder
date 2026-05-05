@@ -21,15 +21,26 @@ directory::
 edpm-hardened-uefi
 ------------------
 
-The CentOS-9-Stream version of ``edpm-hardened-uefi.qcow2`` can be built with
-master branch ``current-podified`` by running::
+The ``edpm-hardened-uefi.qcow2`` image supports the following CentOS Stream and
+RHEL releases with master branch ``current-podified``::
 
     diskimage-builder ./images/edpm-hardened-uefi-centos-9-stream.yaml
+    diskimage-builder ./images/edpm-hardened-uefi-centos-10-stream.yaml
+    diskimage-builder ./images/edpm-hardened-uefi-rhel-9.yaml
+    diskimage-builder ./images/edpm-hardened-uefi-rhel-10.yaml
+
+.. note::
+
+   ``current-podified`` is not yet available for CentOS Stream 10. The CI jobs
+   currently use ``current`` until promotion to ``current-podified`` includes
+   the required fixes::
+
+       DIB_REPO_SETUP=current diskimage-builder ./images/edpm-hardened-uefi-centos-10-stream.yaml
 
 To create a FIPS enabled image, add ``edpm-hardened-uefi-fips.yaml`` to
 include the ``fips`` element::
 
-    diskimage-builder ./images/edpm-hardened-uefi-centos-9-stream.yaml ./images/edpm-hardened-uefi-fips.yaml
+    diskimage-builder ./images/edpm-hardened-uefi-centos-10-stream.yaml ./images/edpm-hardened-uefi-fips.yaml
 
 See dib/repo-setup/README.md for environment variables to control which RDO
 repositories to configure.
@@ -47,16 +58,22 @@ It can then be copied out of the container image, for example into
 ironic-python-agent
 -------------------
 
-The CentOS-9-Stream version of ``ironic-python-agent.initramfs`` and
-``ironic-python-agent.kernel`` can be built with master branch
-``current-podified`` by running::
+The ``ironic-python-agent.initramfs`` and ``ironic-python-agent.kernel`` images
+support the following CentOS Stream and RHEL releases with master branch
+``current-podified``::
 
     diskimage-builder ./images/ironic-python-agent-centos-9-stream.yaml
-
-Similarly, the rhel-9 version can be built with master branch
-``current-podified`` by running::
-
+    diskimage-builder ./images/ironic-python-agent-centos-10-stream.yaml
     diskimage-builder ./images/ironic-python-agent-rhel-9.yaml
+    diskimage-builder ./images/ironic-python-agent-rhel-10.yaml
+
+.. note::
+
+   ``current-podified`` is not yet available for CentOS Stream 10. The CI jobs
+   currently use ``current`` until promotion to ``current-podified`` includes
+   the required fixes::
+
+       DIB_REPO_SETUP=current diskimage-builder ./images/ironic-python-agent-centos-10-stream.yaml
 
 ``ironic-python-agent.qcow2`` can be packaged inside a container image for
 distribution by running::

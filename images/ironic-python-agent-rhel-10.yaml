@@ -18,7 +18,7 @@
   debug-trace: 1
   checksum: true
   environment:
-    DIB_RELEASE: '9'
+    DIB_RELEASE: '10'
     DIB_EPEL_DISABLED: '1'
     DIB_PYTHON_VERSION: '3'
     DIB_DHCP_TIMEOUT: '60'
