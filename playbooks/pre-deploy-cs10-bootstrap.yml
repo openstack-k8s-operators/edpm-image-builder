@@ -1,0 +1,27 @@
+---
+- name: Set up CS10 bootstrap kustomization
+  hosts: controller
+  gather_facts: false
+  vars:
+    _basedir: "{{ cifmw_basedir | default(ansible_user_dir ~ '/ci-framework-data') }}"
+    _manifests_dir: "{{ cifmw_manifests | default(_basedir ~ '/artifacts/manifests') }}"
+  tasks:
+    - name: Ensure kustomization directory exists
+      ansible.builtin.file:
+        path: "{{ _manifests_dir }}/kustomizations/dataplane"
+        state: directory
+        mode: "0755"
+
+    - name: Write CS10 bootstrap kustomization
+      ansible.builtin.copy:
+        dest: "{{ _manifests_dir }}/kustomizations/dataplane/cs10-bootstrap.yaml"
+        content: |
+          apiVersion: kustomize.config.k8s.io/v1beta1
+          kind: Kustomization
+          patches:
+            - target:
+                kind: OpenStackDataPlaneNodeSet
+              patch: |-
+                - op: add
+                  path: /spec/nodeTemplate/ansible/ansibleVars/edpm_bootstrap_command
+                  value: sudo dnf -y update --nobest

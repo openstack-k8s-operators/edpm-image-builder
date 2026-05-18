@@ -9,6 +9,9 @@ managed with the following environment variables (with these defaults):
 * DIB_REPO_SETUP_DISTRO_MIRROR=
 * DIB_REPO_SETUP_MIRROR=https://trunk.rdoproject.org
 
+**Note:** ``current-podified`` is not yet available for CentOS Stream 10. Use
+``DIB_REPO_SETUP=current`` until promotion to ``current-podified`` includes the required fixes.
+
 If DIB_YUM_REPO_CONF is defined, this element will take no action. This makes it
 possible to pass in repo files from the host.
 

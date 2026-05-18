@@ -22,7 +22,6 @@ repo_setup="repo-setup --output-path repos --branch $DIB_REPO_SETUP_BRANCH --rdo
 if [ -n "$DIB_REPO_SETUP_DISTRO_MIRROR" ]; then
     repo_setup+=" --mirror $DIB_REPO_SETUP_DISTRO_MIRROR"
 fi
-repo_setup+=" $DIB_REPO_SETUP"
 
 mkdir repos
 eval $repo_setup
