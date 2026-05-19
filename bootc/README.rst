@@ -6,21 +6,33 @@ Pre-requesites can be installed by running::
 
     make host-deps
 
-To build a CentOS-9-Stream based bootc EDPM container image, run the following
-commands::
+The bootc build defaults target CentOS Stream 9. To build a CentOS Stream 10
+based bootc EDPM container image, override the base image and repo-setup distro
+then run the following commands::
 
     export EDPM_BOOTC_REPO=quay.io/<account>/edpm-bootc
-    export EDPM_BOOTC_TAG=centos9
+    export EDPM_BOOTC_TAG=centos10
+    export EDPM_BASE_IMAGE=quay.io/centos-bootc/centos-bootc:stream10
+    export REPO_SETUP_DISTRO=centos10
+    export REPO_SETUP_BRANCH=master
+    export REPO_SETUP=podified-ci-testing
     make build
     sudo podman push $EDPM_BOOTC_REPO:$EDPM_BOOTC_TAG
 
-To build a RHEL-9.4 based bootc EDPM container image using internal
-repositories, install the required certificates then run the following
-commands::
+.. note::
 
-    # switch to RHEL-9.4 images
-    export BUILDER_IMAGE=registry.redhat.io/rhel9/bootc-image-builder:9.4
-    export EDPM_BASE_IMAGE=registry.redhat.io/rhel9/rhel-bootc:9.4
+   ``current-podified`` is not yet available for CentOS Stream 10. The above
+   uses ``podified-ci-testing`` and ``master`` branch until it is.
+
+To continue using CentOS Stream 9, leave the defaults in place and run
+``make build`` (the default tag is ``latest``).
+
+To build a RHEL 9 based bootc EDPM container image using internal repositories,
+install the required certificates then run the following commands::
+
+    # switch to RHEL 9 images
+    export BUILDER_IMAGE=registry.redhat.io/rhel9/bootc-image-builder:latest
+    export EDPM_BASE_IMAGE=registry.redhat.io/rhel9/rhel-bootc:latest
 
     # Config to build repository files for internal repos
     export CURL_CA_BUNDLE=/etc/pki/ca-trust/extracted/openssl/ca-bundle.trust.crt
@@ -38,12 +50,36 @@ commands::
     make build
     sudo podman push $EDPM_BOOTC_REPO:$EDPM_BOOTC_TAG
 
-To build a RHEL-9.4 based bootc EDPM container using published packages, run
-the following commands::
+To build a RHEL 10 based bootc EDPM container image using internal
+repositories, use the matching RHEL 10 images and repo-setup distro::
 
-    # switch to RHEL-9.4 images
-    export BUILDER_IMAGE=registry.redhat.io/rhel9/bootc-image-builder:9.4
-    export EDPM_BASE_IMAGE=registry.redhat.io/rhel9/rhel-bootc:9.4
+    # switch to RHEL 10 images
+    export BUILDER_IMAGE=registry.redhat.io/rhel10/bootc-image-builder:latest
+    export EDPM_BASE_IMAGE=registry.redhat.io/rhel10/rhel-bootc:latest
+
+    # Config to build repository files for internal repos
+    export CURL_CA_BUNDLE=/etc/pki/ca-trust/extracted/openssl/ca-bundle.trust.crt
+    export REPO_SETUP_DISTRO=rhel10
+    export REPO_SETUP=current-podified
+    export REPO_SETUP_BRANCH=osp18
+    export REPO_SETUP_MIRROR=<mirror for internal repos>
+    export REPO_SETUP_EXTRA="rhos-release ceph-6.0 -r 10 -t yum.repos.d"
+
+    # login to the registry
+    sudo podman login registry.redhat.io
+
+    export EDPM_BOOTC_REPO=quay.io/<account>/edpm-bootc
+    export EDPM_BOOTC_TAG=rhel10-rhos-release
+    make build
+    sudo podman push $EDPM_BOOTC_REPO:$EDPM_BOOTC_TAG
+
+To build a RHEL 9 or RHEL 10 based bootc EDPM container using published
+packages, run the following commands::
+
+    # switch to the matching RHEL bootc images
+    export BUILDER_IMAGE=registry.redhat.io/rhel9/bootc-image-builder:latest
+    export EDPM_BASE_IMAGE=registry.redhat.io/rhel9/rhel-bootc:latest
+    export RHEL_MAJOR=9
 
     # make a custom copy of the subscription-manager script and edit it for
     # your registration details
@@ -54,6 +90,10 @@ the following commands::
     export EDPM_BOOTC_TAG=rhel9-rhsm
     make build
     sudo podman push $EDPM_BOOTC_REPO:$EDPM_BOOTC_TAG
+
+Set ``RHEL_MAJOR=10`` and switch the ``BUILDER_IMAGE``, ``EDPM_BASE_IMAGE``,
+and ``EDPM_BOOTC_TAG`` values to their ``rhel10`` equivalents to build the
+same image against RHEL 10.
 
 To convert this container image to ``output/edpm-bootc.qcow2``, run the
 following command::

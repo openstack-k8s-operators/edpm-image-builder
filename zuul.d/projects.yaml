@@ -3,6 +3,8 @@
     name: openstack-k8s-operators/edpm-image-builder
     github-check:
       jobs:
-        - eib-content-provider-build-images
-        - eib-podified-multinode-ironic-deployment
+        - eib-content-provider-build-images-cs9
+        - eib-content-provider-build-images-cs10
         - eib-crc-podified-edpm-baremetal
+        - eib-crc-podified-edpm-baremetal-cs10
+        - eib-podified-multinode-ironic-deployment
