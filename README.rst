@@ -5,6 +5,11 @@ edpm-image-builder
 A repository to build OS images for deploying EDPM bare metal nodes using
 diskimage-builder.
 
+This repository's CI covers CentOS Stream 9 bootc image builds and deployment
+tests, plus CentOS Stream 10 nonbootc hardened-UEFI and ironic-python-agent
+images and hardened-UEFI deployment tests. CentOS Stream 10 bootc image builds
+and deployment tests live in ``s2i-openstack-containers``.
+
 Image build elements
 --------------------
 
@@ -31,8 +36,8 @@ RHEL releases with master branch ``current-podified``::
 
 .. note::
 
-   ``current-podified`` is not yet available for CentOS Stream 10. The CI jobs
-   currently use ``current`` until promotion to ``current-podified`` includes
+   ``current-podified`` is not yet available for CentOS Stream 10. Use
+   ``current`` until promotion to ``current-podified`` includes
    the required fixes::
 
        DIB_REPO_SETUP=current diskimage-builder ./images/edpm-hardened-uefi-centos-10-stream.yaml
@@ -69,8 +74,8 @@ support the following CentOS Stream and RHEL releases with master branch
 
 .. note::
 
-   ``current-podified`` is not yet available for CentOS Stream 10. The CI jobs
-   currently use ``current`` until promotion to ``current-podified`` includes
+   ``current-podified`` is not yet available for CentOS Stream 10. Use
+   ``current`` until promotion to ``current-podified`` includes
    the required fixes::
 
        DIB_REPO_SETUP=current diskimage-builder ./images/ironic-python-agent-centos-10-stream.yaml
