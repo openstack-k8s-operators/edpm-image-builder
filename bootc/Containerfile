@@ -116,6 +116,10 @@ ARG USER_PACKAGES=""
 
 RUN --mount=type=secret,id=rhsm,dst=/var/tmp/rhsm-script.sh \
     if [ -f /var/tmp/rhsm-script.sh ]; then bash /var/tmp/rhsm-script.sh; fi && \
+    # centos-bootc can ship a NetworkManager NEVRA newer than BaseOS/AppStream
+    # (e.g. 1.58.0 vs 1.58~rc1). NetworkManager-ovs requires an exact match, so
+    # align the installed NM stack with the mounted repos before installing.
+    dnf -y distro-sync 'NetworkManager*' && \
     dnf -y install \
         $BOOTSTRAP_PACKAGES \
         $CEPH_PACKAGES \
@@ -144,6 +148,11 @@ RUN --mount=type=secret,id=rhsm,dst=/var/tmp/rhsm-script.sh \
     (subscription-manager unregister || true) && \
     systemctl enable $ENABLE_UNITS
 
+COPY patch-dracut-fips.py /usr/local/bin/patch-dracut-fips.py
+# Patch on-disk fips.sh. Initramfs rebuild happens after FIPS config below
+# so the booted ramdisk contains the bind-mount fallback.
+RUN python3 /usr/local/bin/patch-dracut-fips.py && \
+    bash -n /usr/lib/dracut/modules.d/01fips/fips.sh
 
 # Configure FIPS
 ARG FIPS=1
@@ -154,7 +163,13 @@ RUN if [ "${FIPS}" = "1" ] ; \
         touch /etc/system-fips ; \
         mkdir -p /usr/lib/bootc/kargs.d ; \
         echo -e "# Enable FIPS\nkargs = [\"fips=1\"]\n" > /usr/lib/bootc/kargs.d/01-fips.toml ; \
-    fi
+    fi && \
+    for kver in /usr/lib/modules/*; do \
+        [ -d "${kver}" ] || continue; \
+        kver=$(basename "${kver}"); \
+        dracut --force --no-hostonly --reproducible \
+            "/usr/lib/modules/${kver}/initramfs.img" "${kver}"; \
+    done
 
 # Drop Ansible fact into place
 COPY ansible-facts/bootc.fact /etc/ansible/facts.d/bootc.fact
