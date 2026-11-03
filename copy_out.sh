@@ -39,7 +39,7 @@ if [ ! -f $src_checksum ]; then
 fi
 
 dest_checksum=${DEST_DIR%%/}/${CHECKSUM_FILE}
-checksum_ext="${CHECKSUM_FILE##*.qcow2}"
+checksum_ext=".${CHECKSUM_FILE##*.}"
 touch $dest_checksum
 while read -r checksum_entry; do
     file_name=$(echo "$checksum_entry" | cut -d " " -f 3)
@@ -67,4 +67,4 @@ while read -r checksum_entry; do
     fi
 done < $src_checksum
 cp -v $src_checksum $dest_checksum
-sha256sum -c $dest_checksum
+(cd $DEST_DIR && sha256sum -c $CHECKSUM_FILE)
