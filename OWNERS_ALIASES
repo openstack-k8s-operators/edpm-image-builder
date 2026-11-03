@@ -3,10 +3,8 @@
 aliases:
   edpm-approvers:
   - fultonj
-  - rebtoor
   - slagle
   - rabi
-  - jpodivin
   ci-approvers:
   - evallesp
   - bshewale
