@@ -16,8 +16,7 @@
       cifmw_repo_setup_branch: master
       cifmw_repo_setup_promotion: current
       cifmw_edpm_build_images_base_image: quay.io/centos/centos:stream10-minimal
-      cifmw_edpm_build_images_bootc: true
-      cifmw_edpm_build_images_bootc_base_image: quay.io/centos-bootc/centos-bootc:stream10
+      cifmw_edpm_build_images_bootc: false
 
 - job:
     name: eib-crc-podified-edpm-baremetal
@@ -47,18 +46,7 @@
       cifmw_update_containers_openstack: true
       cifmw_install_yamls_vars:
         BAREMETAL_OS_IMG: edpm-bootc.qcow2
-
-- job:
-    name: eib-crc-podified-edpm-baremetal-bootc-cs10
-    parent: cifmw-crc-podified-edpm-baremetal-bootc
-    dependencies: ["eib-content-provider-build-images-cs10"]
-    vars:
-      cifmw_update_containers_openstack: true
-      cifmw_install_yamls_vars:
-        BAREMETAL_OS_IMG: edpm-bootc.qcow2
-      cifmw_install_yamls_vars_patch_cs10:
-        dataplane_repo_setup_repo: current
-        dataplane_repo_setup_branch: master
+        DATAPLANE_NETWORK_CONFIG_TOOL: os-net-config
 
 - job:
     name: eib-podified-multinode-ironic-deployment
