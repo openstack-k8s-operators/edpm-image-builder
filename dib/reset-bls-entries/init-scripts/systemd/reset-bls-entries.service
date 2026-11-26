@@ -2,7 +2,6 @@
 Description=Rename all bootloader entries to match the machine-id
 DefaultDependencies=no
 After=local-fs.target
-ConditionFirstBoot=yes
 
 [Service]
 Type=oneshot
